@@ -13,5 +13,5 @@ repositories {
 
 dependencies {
 	// Appodeal SDK
-	implementation 'com.appodeal.ads:sdk:2.6.1.+'
+	implementation 'com.appodeal.ads:sdk:2.6.2.+'
 }
