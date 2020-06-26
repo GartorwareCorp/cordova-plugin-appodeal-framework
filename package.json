@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "@gartorware/cordova-plugin-appodeal-framework",
   "cordova_name": "Appodeal Cordova Plugin",
   "platforms": [
@@ -23,7 +23,7 @@
     "phonegap",
     "npm",
     "ads",
-	  "monetisation",
+    "monetisation",
     "ecosystem:cordova",
     "cordova-android"
   ],
