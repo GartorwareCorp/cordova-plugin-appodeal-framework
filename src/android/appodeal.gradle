@@ -13,13 +13,15 @@ repositories {
 
 dependencies {
     // Appodeal SDK
-    implementation 'com.appodeal.ads.sdk:core:2.6.2'
-    implementation 'com.appodeal.ads.sdk.networks:amazon_ads:2.6.0.1'
-    implementation 'com.appodeal.ads.sdk.networks:applovin:2.6.0.2'
-    implementation 'com.appodeal.ads.sdk.networks:appodealx:2.6.0.1'
-    implementation 'com.appodeal.ads.sdk.networks:admob:2.6.0.1'
-    implementation 'com.appodeal.ads.sdk.networks:inmobi:2.6.0.1'
-    implementation 'com.appodeal.ads.sdk.networks:mraid:2.6.0.1'
-    implementation 'com.appodeal.ads.sdk.networks:smaato:2.6.0.2'
-    implementation 'com.appodeal.ads.sdk.networks:startapp:2.6.0.2'
+    implementation 'com.appodeal.ads.sdk:core:2.6.4'
+    implementation 'com.appodeal.ads.sdk.networks:a4g:2.6.4.2'
+    implementation 'com.appodeal.ads.sdk.networks:amazon_ads:2.6.4.1'
+    implementation 'com.appodeal.ads.sdk.networks:applovin:2.6.4.4'
+    implementation 'com.appodeal.ads.sdk.networks:appodealx:2.6.4.1'
+    implementation 'com.appodeal.ads.sdk.networks:admob:2.6.4.2'
+    implementation 'com.appodeal.ads.sdk.networks:inmobi:2.6.4.1'
+    implementation 'com.appodeal.ads.sdk.networks:mraid:2.6.4.1'
+    implementation 'com.appodeal.ads.sdk.networks:smaato:2.6.4.2'
+    implementation 'com.appodeal.ads.sdk.networks:startapp:2.6.4.5'
+    
 }
