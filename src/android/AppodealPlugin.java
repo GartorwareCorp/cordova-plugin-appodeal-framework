@@ -52,8 +52,6 @@ public class AppodealPlugin extends CordovaPlugin {
     private static final String ACTION_SET_CHILD_TREATMENT = "setChildDirectedTreatment";
     private static final String ACTION_DISABLE_NETWORK = "disableNetwork";
     private static final String ACTION_DISABLE_NETWORK_FOR_TYPE = "disableNetworkType";
-    private static final String ACTION_DISABLE_LOCATION_PERMISSION_CHECK = "disableLocationPermissionCheck";
-    private static final String ACTION_DISABLE_WRITE_EXTERNAL_STORAGE_CHECK = "disableWriteExternalStoragePermissionCheck";
     private static final String ACTION_SET_ON_LOADED_TRIGGER_BOTH = "setTriggerOnLoadedOnPrecache";
     private static final String ACTION_MUTE_VIDEOS_IF_CALLS_MUTED = "muteVideosIfCallsMuted";
     private static final String ACTION_START_TEST_ACTIVITY = "showTestScreen";
@@ -68,7 +66,7 @@ public class AppodealPlugin extends CordovaPlugin {
     private static final String ACTION_SET_CUSTOM_STRING_RULE = "setCustomStringRule";
     private static final String ACTION_GET_REWARD_PARAMETERS = "getRewardParameters";
     private static final String ACTION_GET_REWARD_PARAMETERS_FOR_PLACEMENT = "getRewardParametersForPlacement";
-    private static final String ACTION_SET_SEGMENT_FILTER = "setSegmentFilter";
+    private static final String ACTION_SET_CUSTOM_FILTER = "setCustomFilter";
     private static final String ACTION_SET_EXTRA_DATA = "setExtraData";
     private static final String ACTION_GET_PREDICTED_ECPM = "getPredictedEcpm";
 
@@ -109,7 +107,6 @@ public class AppodealPlugin extends CordovaPlugin {
         if (action.equals(ACTION_INITIALIZE)) {
             final String appKey = args.getString(0);
             final int adType = args.getInt(1);
-            final boolean consentValue = args.optBoolean(2, true); // Same as Appodeal.initialize(@NonNull Activity activity, @NonNull String appKey, int adTypes)
             cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -117,10 +114,14 @@ public class AppodealPlugin extends CordovaPlugin {
                         Appodeal.setTesting(true);
                     }
                     log("Initializing SDK");
-                    Appodeal.initialize(cordova.getActivity(), appKey, getAdType(adType), consentValue);
-                    isInitialized = true;
-                    log("SDK initialized");
-                    callback.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+                    Appodeal.initialize(cordova.getActivity(), appKey, getAdType(adType), new ApdInitializationCallback() {
+                        @Override public void onInitializationFinished(List<? extends ApdInitializationError> list) {
+                            //Appodeal initialization finished
+                            isInitialized = true;
+                            log("SDK initialized");
+                            callback.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+                        }
+                    });
                 }
             });
             return true;
@@ -328,7 +329,7 @@ public class AppodealPlugin extends CordovaPlugin {
             cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Appodeal.disableNetwork(cordova.getActivity(), network);
+                    Appodeal.disableNetwork(network);
                 }
             });
             return true;
@@ -349,22 +350,6 @@ public class AppodealPlugin extends CordovaPlugin {
                 @Override
                 public void run() {
                     Appodeal.setTriggerOnLoadedOnPrecache(getAdType(adType), setOnTriggerBoth);
-                }
-            });
-            return true;
-        } else if (action.equals(ACTION_DISABLE_LOCATION_PERMISSION_CHECK)) {
-            cordova.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Appodeal.disableLocationPermissionCheck();
-                }
-            });
-            return true;
-        } else if (action.equals(ACTION_DISABLE_WRITE_EXTERNAL_STORAGE_CHECK)) {
-            cordova.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Appodeal.disableWriteExternalStoragePermissionCheck();
                 }
             });
             return true;
@@ -469,13 +454,13 @@ public class AppodealPlugin extends CordovaPlugin {
                 }
             });
             return true;
-        } else if (action.equals(ACTION_SET_SEGMENT_FILTER)) {
+        } else if (action.equals(ACTION_SET_CUSTOM_FILTER)) {
             final String name = args.getString(0);
             final String value = args.getString(1);
             cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Appodeal.setSegmentFilter(name, value);
+                    Appodeal.setCustomFilter(name, value);
                 }
             });
             return true;

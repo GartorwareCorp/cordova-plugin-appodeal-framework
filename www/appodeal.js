@@ -29,9 +29,9 @@ Appodeal.Gender = {
 
 Appodeal.pluginVersion = '3.0.4';
 
-Appodeal.initialize = function(appKey, adType, consent, callback) {
+Appodeal.initialize = function(appKey, adType, callback) {
 	exec(null, null, "AppodealPlugin", "setPluginVersion", [Appodeal.pluginVersion]);
-    exec(callback, null, "AppodealPlugin", "initialize", [appKey, adType, consent]);
+    exec(callback, null, "AppodealPlugin", "initialize", [appKey, adType]);
 };
 
 Appodeal.show = function(adType, callback) {
@@ -114,14 +114,6 @@ Appodeal.disableNetworkType = function(network, adType) {
     exec(null, null, "AppodealPlugin", "disableNetworkType", [network, adType]);
 };
 
-Appodeal.disableLocationPermissionCheck = function() {
-    exec(null, null, "AppodealPlugin", "disableLocationPermissionCheck", []);
-};
-
-Appodeal.disableWriteExternalStoragePermissionCheck = function() {
-    exec(null, null, "AppodealPlugin", "disableWriteExternalStoragePermissionCheck", []);
-};
-
 Appodeal.muteVideosIfCallsMuted = function(value) {
     exec(null, null, "AppodealPlugin", "muteVideosIfCallsMuted", [value]);
 };
@@ -158,8 +150,8 @@ Appodeal.getRewardParametersForPlacement = function(placement, callback) {
     exec(callback, null, "AppodealPlugin", "getRewardParametersForPlacement", [placement]);
 };
 
-Appodeal.setSegmentFilter = function(name, value) {
-    exec(null, null, "AppodealPlugin", "setSegmentFilter", [name, value]);
+Appodeal.setCustomFilter = function(name, value) {
+    exec(null, null, "AppodealPlugin", "setCustomFilter", [name, value]);
 };
 
 Appodeal.setExtraData = function(name, value) {

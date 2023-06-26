@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="cordova-plugin-appodeal-framework" version="1.0.2" xmlns:android="http://schemas.android.com/apk/res/android" xmlns="http://apache.org/cordova/ns/plugins/1.0">
+<plugin id="cordova-plugin-appodeal-framework" version="3.0.2" xmlns:android="http://schemas.android.com/apk/res/android" xmlns="http://apache.org/cordova/ns/plugins/1.0">
   <name>Appodeal Plugin</name>
   <description>Appodeal Plugin</description>
   <author>Appodeal</author>
@@ -24,13 +24,21 @@
       <config-file parent="/manifest" target="app/src/main/AndroidManifest.xml" mode="merge">
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         <uses-permission android:name="android.permission.INTERNET" />
-
-        <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />--> <!--optional-->
-        <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />--> <!--optional-->
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!--optional-->
         <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!--optional-->
         <uses-permission android:name="android.permission.VIBRATE" /><!--optional-->
-        <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/> <!--for Mintegral SDK-->
+
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
+          tools:node="remove"/>
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
+          tools:node="remove" />
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+          tools:node="remove" />
+        <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"
+          tools:node="remove"/> 
+        <uses-permission android:name="android.permission.READ_PHONE_STATE"
+          tools:node="remove" />
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+          tools:node="remove" />
       </config-file>
 
       <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" mode="merge">
