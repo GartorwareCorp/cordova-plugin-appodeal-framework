@@ -21,27 +21,19 @@
           </feature>
       </config-file>
 
-      <config-file parent="/manifest" target="app/src/main/AndroidManifest.xml" mode="merge">
+      <config-file target="AndroidManifest.xml" parent="/*">
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         <uses-permission android:name="android.permission.INTERNET" />
         <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!--optional-->
         <uses-permission android:name="android.permission.VIBRATE" /><!--optional-->
 
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
-          tools:node="remove"/>
         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
           tools:node="remove" />
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
           tools:node="remove" />
-        <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"
-          tools:node="remove"/> 
-        <uses-permission android:name="android.permission.READ_PHONE_STATE"
-          tools:node="remove" />
-        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-          tools:node="remove" />
       </config-file>
 
-      <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" mode="merge">
+      <config-file parent="/manifest/application" target="AndroidManifest.xml">
         <!-- Admob app id as required by play-services 17+ -->
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="$ADMOB_APP_ID"/>
       </config-file>
