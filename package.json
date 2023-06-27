@@ -1,6 +1,6 @@
 {
   "version": "3.0.2",
-  "name": "@gartorware/cordova-plugin-appodeal-framework",
+  "name": "cordova-plugin-appodeal-framework",
   "cordova_name": "Appodeal Cordova Plugin",
   "platforms": [
     "android"
