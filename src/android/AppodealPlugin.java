@@ -12,6 +12,8 @@ import android.widget.FrameLayout;
 import android.view.ViewGroup;
 import android.view.Gravity;
 
+import java.util.List;
+
 import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.InterstitialCallbacks;
@@ -499,7 +501,7 @@ public class AppodealPlugin extends CordovaPlugin {
             cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Appodeal.setUserId(userId)
+                    Appodeal.setUserId(userId);
                 }
             });
             return true;
