@@ -8,7 +8,6 @@ Appodeal.BANNER = 4;
 Appodeal.BANNER_BOTTOM = 8;
 Appodeal.BANNER_TOP = 16;
 Appodeal.REWARDED_VIDEO = 128;
-Appodeal.NON_SKIPPABLE_VIDEO = 256;
 
 Appodeal.BANNER_X_SMART = 0;
 Appodeal.BANNER_X_CENTER = 1;
@@ -19,12 +18,6 @@ Appodeal.LogLevel = {
     NONE: 0,
     DEBUG: 1,
     VERBOSE: 2
-};
-
-Appodeal.Gender = {
-    OTHER: 0,
-    MALE: 1,
-    FEMALE: 2
 };
 
 Appodeal.pluginVersion = '3.0.4';
@@ -60,10 +53,6 @@ Appodeal.hide = function(adType) {
 
 Appodeal.destroy = function(adType) {
 	exec(null, null, "AppodealPlugin", "destroy", [adType]);
-}
-
-Appodeal.onResume = function(adType) {
-	exec(null, null, "AppodealPlugin", "onResume", [adType]);
 }
 
 Appodeal.setAutoCache = function(adType, autoCache) {
@@ -162,14 +151,6 @@ Appodeal.getPredictedEcpm = function(adType, callback) {
     exec(callback, null, "AppodealPlugin", "getPredictedEcpm", [adType]);
 };
 
-Appodeal.setAge = function(age) {
-    exec(null, null, "AppodealPlugin", "setAge", [age]);
-};
-
-Appodeal.setGender = function(gender) {
-    exec(null, null, "AppodealPlugin", "setGender", [gender]);
-};
-
 Appodeal.setUserId = function(userid){
     exec(null, null, "AppodealPlugin", "setUserId", [userid]);
 };
@@ -180,10 +161,6 @@ Appodeal.trackInAppPurchase = function(amount, currency){
 
 Appodeal.setInterstitialCallbacks = function(callback) {
     exec(callback, null, "AppodealPlugin", "setInterstitialCallbacks", [])
-};
-
-Appodeal.setNonSkippableVideoCallbacks = function(callbacks) {
-    exec(callbacks, null, "AppodealPlugin", "setNonSkippableVideoCallbacks", []);
 };
 
 Appodeal.setRewardedVideoCallbacks = function(callbacks) {
