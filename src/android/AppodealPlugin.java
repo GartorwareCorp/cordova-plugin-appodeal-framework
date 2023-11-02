@@ -23,6 +23,7 @@ import com.appodeal.ads.RewardedVideoCallbacks;
 import com.appodeal.ads.BannerView;
 import com.appodeal.ads.regulator.CCPAUserConsent;
 import com.appodeal.ads.regulator.GDPRUserConsent;
+import com.appodeal.ads.rewarded.Reward;
 import com.appodeal.ads.utils.Log;
 import com.appodeal.ads.initializing.ApdInitializationCallback;
 import com.appodeal.ads.initializing.ApdInitializationError;
@@ -578,8 +579,9 @@ public class AppodealPlugin extends CordovaPlugin {
                 public void run() {
                     try {
                         JSONObject vals = new JSONObject();
-                        vals.put("amount", Appodeal.getRewardParameters().first);
-                        vals.put("currency", Appodeal.getRewardParameters().second);
+                        Reward reward = Appodeal.getReward();
+                        vals.put("amount", reward.getAmount());
+                        vals.put("currency", reward.getCurrency());
                         callback.sendPluginResult(new PluginResult(PluginResult.Status.OK, vals));
                     } catch (JSONException e) {
                     }
@@ -593,8 +595,9 @@ public class AppodealPlugin extends CordovaPlugin {
                 public void run() {
                     try {
                         JSONObject vals = new JSONObject();
-                        vals.put("amount", Appodeal.getRewardParameters(placement).first);
-                        vals.put("currency", Appodeal.getRewardParameters(placement).second);
+                        Reward reward = Appodeal.getReward(placement);
+                        vals.put("amount", reward.getAmount());
+                        vals.put("currency", reward.getCurrency());
                         callback.sendPluginResult(new PluginResult(PluginResult.Status.OK, vals));
                     } catch (JSONException e) {
                     }
