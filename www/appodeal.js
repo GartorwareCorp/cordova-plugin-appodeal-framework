@@ -20,11 +20,11 @@ Appodeal.LogLevel = {
     VERBOSE: 2
 };
 
-Appodeal.pluginVersion = '3.0.4';
+Appodeal.pluginVersion = '3.2.0-beta.2';
 
-Appodeal.initialize = function(appKey, adType, callback) {
+Appodeal.initialize = function(appKey, adType, showConsentManager, consentValue, callback) {
 	exec(null, null, "AppodealPlugin", "setPluginVersion", [Appodeal.pluginVersion]);
-    exec(callback, null, "AppodealPlugin", "initialize", [appKey, adType]);
+    exec(callback, null, "AppodealPlugin", "initialize", [appKey, adType, showConsentManager, consentValue]);
 };
 
 Appodeal.show = function(adType, callback) {

@@ -12,6 +12,8 @@ import android.widget.FrameLayout;
 import android.view.ViewGroup;
 import android.view.Gravity;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 import com.appodeal.ads.Appodeal;
@@ -19,9 +21,18 @@ import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.InterstitialCallbacks;
 import com.appodeal.ads.RewardedVideoCallbacks;
 import com.appodeal.ads.BannerView;
+import com.appodeal.ads.regulator.CCPAUserConsent;
+import com.appodeal.ads.regulator.GDPRUserConsent;
 import com.appodeal.ads.utils.Log;
 import com.appodeal.ads.initializing.ApdInitializationCallback;
 import com.appodeal.ads.initializing.ApdInitializationError;
+import com.appodeal.consent.Consent;
+import com.appodeal.consent.ConsentForm;
+import com.appodeal.consent.ConsentFormListener;
+import com.appodeal.consent.ConsentInfoUpdateListener;
+import com.appodeal.consent.ConsentManager;
+import com.appodeal.consent.ConsentManagerError;
+import com.appodeal.consent.IConsentFormListener;
 
 import org.json.JSONObject;
 
@@ -103,20 +114,114 @@ public class AppodealPlugin extends CordovaPlugin {
         if (action.equals(ACTION_INITIALIZE)) {
             final String appKey = args.getString(0);
             final int adType = args.getInt(1);
+            final boolean showConsentManager = args.optBoolean(2, true);
+            final boolean consentValue = args.optBoolean(3, true);
             cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if("true".equals(Settings.System.getString(cordova.getActivity().getContentResolver(), "firebase.test.lab"))) {
                         Appodeal.setTesting(true);
                     }
-                    log("Initializing SDK");
-                    Appodeal.initialize(cordova.getActivity(), appKey, getAdType(adType), new ApdInitializationCallback() {
+
+                    ConsentManager.requestConsentInfoUpdate(cordova.getActivity(), appKey, new ConsentInfoUpdateListener() {
+
+                        private void updateCcpaConsentValue(boolean wasGranted) {
+                            if (wasGranted) {
+                                Appodeal.updateCCPAUserConsent(CCPAUserConsent.OptIn);
+                            } else {
+                                Appodeal.updateCCPAUserConsent(CCPAUserConsent.OptOut);
+                            }
+                        }
+
+                        private void updateGdprConsentValue(boolean wasGranted) {
+                            if (wasGranted) {
+                                Appodeal.updateGDPRUserConsent(GDPRUserConsent.Personalized);
+                            } else {
+                                Appodeal.updateGDPRUserConsent(GDPRUserConsent.NonPersonalized);
+                            }
+                        }
+
+                        private void showConsent() {
+                            IConsentFormListener consentFormListener = new ConsentFormListener() {
+                                @Override
+                                public void onConsentFormLoaded(@NonNull ConsentForm consentForm) {
+                                    // Consent form was loaded. Now you can display consent form
+                                    consentForm.show();
+                                }
+
+                                @Override
+                                public void onConsentFormError(@NonNull ConsentManagerError error) {
+                                    // Consent form loading or showing failed. More info can be found in 'error' object
+                                    // Initialize the Appodeal SDK here.
+                                    initializeAppodeal();
+                                }
+
+                                @Override
+                                public void onConsentFormOpened() {
+                                    // Consent form was shown
+                                }
+
+                                @Override
+                                public void onConsentFormClosed(@NonNull Consent consent) {
+                                    // Consent form was closed. Update consent value here.
+                                    Appodeal.updateConsent(consent);
+                                    // Consent value was updated.
+                                    // Initialize the Appodeal SDK here.
+                                    initializeAppodeal();
+                                }
+                            };
+
+                            // Create new Consent form instance
+                            ConsentForm consentForm = new ConsentForm(cordova.getActivity(), consentFormListener);
+
+                            // Show the consent form
+                            consentForm.load();
+                        }
+
+                        private void initializeAppodeal() {
+                            log("Initializing SDK");
+                            Appodeal.initialize(cordova.getActivity(), appKey, getAdType(adType), new ApdInitializationCallback() {
+                                @Override
+                                public void onInitializationFinished(List<ApdInitializationError> list) {
+                                    //Appodeal initialization finished
+                                    isInitialized = true;
+                                    log("SDK initialized");
+                                    callback.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+                                }
+                            });
+                        }
+
                         @Override
-                        public void onInitializationFinished(List<ApdInitializationError> list) {
-                            //Appodeal initialization finished
-                            isInitialized = true;
-                            log("SDK initialized");
-                            callback.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+                        public void onConsentInfoUpdated(@NonNull Consent consent) {
+                            if(showConsentManager) {
+                                super.onConsentInfoUpdated(consent);
+                                if (ConsentManager.getShouldShow()) {
+                                    // Show consent window to get a user consent.
+                                    showConsent();
+                                } else {
+                                    // Consent value already set. Initialize.
+                                    initializeAppodeal();
+                                }
+                            } else {
+                                if(ConsentManager.getShouldShow()){
+                                    // Consent value was provided. Set values and initialize.
+                                    updateCcpaConsentValue(consentValue);
+                                    updateGdprConsentValue(consentValue);
+
+                                    initializeAppodeal();
+                                } else {
+                                    // Consent value already set. Initialize.
+                                    initializeAppodeal();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailedToUpdateConsentInfo(@NonNull ConsentManagerError consentManagerError) {
+                            if(showConsentManager) {
+                                super.onFailedToUpdateConsentInfo(consentManagerError);
+                            }
+                            initializeAppodeal();
                         }
                     });
                 }
@@ -283,18 +388,18 @@ public class AppodealPlugin extends CordovaPlugin {
                 @Override
                 public void run() {
                     switch (logLevel) {
-                    case 0:
-                        Appodeal.setLogLevel(Log.LogLevel.none);
-                        break;
-                    case 1:
-                        Appodeal.setLogLevel(Log.LogLevel.debug);
-                        break;
-                    case 2:
-                        Appodeal.setLogLevel(Log.LogLevel.verbose);
-                        break;
-                    default:
-                        Appodeal.setLogLevel(Log.LogLevel.none);
-                        break;
+                        case 0:
+                            Appodeal.setLogLevel(Log.LogLevel.none);
+                            break;
+                        case 1:
+                            Appodeal.setLogLevel(Log.LogLevel.debug);
+                            break;
+                        case 2:
+                            Appodeal.setLogLevel(Log.LogLevel.verbose);
+                            break;
+                        default:
+                            Appodeal.setLogLevel(Log.LogLevel.none);
+                            break;
                     }
                 }
             });
@@ -323,7 +428,7 @@ public class AppodealPlugin extends CordovaPlugin {
             cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Appodeal.disableNetwork(cordova.getActivity(), network, getAdType(adType));
+                    Appodeal.disableNetwork(network, getAdType(adType));
                 }
             });
             return true;
@@ -953,7 +1058,7 @@ public class AppodealPlugin extends CordovaPlugin {
     };
 
     private ViewGroup getViewGroup(int child) {
-        ViewGroup vg = (ViewGroup) this.cordova.getActivity().getWindow().getDecorView()
+        ViewGroup vg = this.cordova.getActivity().getWindow().getDecorView()
                 .findViewById(android.R.id.content);
         if (child != -1)
             vg = (ViewGroup) vg.getChildAt(child); // child == 0 is view from setContentView
