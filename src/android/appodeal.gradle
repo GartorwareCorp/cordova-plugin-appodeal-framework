@@ -17,14 +17,10 @@ repositories {
 dependencies {
 	// Appodeal SDK
     implementation 'com.appodeal.ads.sdk:core:3.2.0-beta.2'
-    implementation 'com.appodeal.ads.sdk.networks:adcolony:3.2.0.0-beta.2'
     implementation 'com.appodeal.ads.sdk.networks:applovin:3.2.0.0-beta.2'
     implementation 'com.appodeal.ads.sdk.networks:bidmachine:3.2.0.0-beta.2'
     implementation 'com.appodeal.ads.sdk.networks:bidon:3.2.0.0-beta.2'
     implementation 'com.appodeal.ads.sdk.networks:admob:3.2.0.0-beta.2'
     implementation 'com.appodeal.ads.sdk.networks:iab:3.2.0.0-beta.2'
-    implementation 'com.appodeal.ads.sdk.networks:ironsource:3.2.0.0-beta.2'
-    implementation 'com.appodeal.ads.sdk.services:sentry_analytics:3.2.0.0-beta.2'
-    implementation 'com.appodeal.ads.sdk.services:stack_analytics:3.2.0.0-beta.2'
     implementation 'com.appodeal.ads.sdk.networks:unity_ads:3.2.0.0-beta.2'
 }
